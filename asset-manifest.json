@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/secret_message/static/css/main.20e4897c.css",
-    "main.js": "/secret_message/static/js/main.222f8f62.js",
-    "static/js/787.2cbeea0f.chunk.js": "/secret_message/static/js/787.2cbeea0f.chunk.js",
-    "static/media/message-icon.png": "/secret_message/static/media/message-icon.52609c68e8e701d47220.png",
-    "index.html": "/secret_message/index.html",
-    "main.20e4897c.css.map": "/secret_message/static/css/main.20e4897c.css.map",
-    "main.222f8f62.js.map": "/secret_message/static/js/main.222f8f62.js.map",
-    "787.2cbeea0f.chunk.js.map": "/secret_message/static/js/787.2cbeea0f.chunk.js.map"
+    "main.css": "/secret-message-react/static/css/main.20e4897c.css",
+    "main.js": "/secret-message-react/static/js/main.f884af44.js",
+    "static/js/787.2cbeea0f.chunk.js": "/secret-message-react/static/js/787.2cbeea0f.chunk.js",
+    "static/media/message-icon.png": "/secret-message-react/static/media/message-icon.52609c68e8e701d47220.png",
+    "index.html": "/secret-message-react/index.html",
+    "main.20e4897c.css.map": "/secret-message-react/static/css/main.20e4897c.css.map",
+    "main.f884af44.js.map": "/secret-message-react/static/js/main.f884af44.js.map",
+    "787.2cbeea0f.chunk.js.map": "/secret-message-react/static/js/787.2cbeea0f.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.20e4897c.css",
-    "static/js/main.222f8f62.js"
+    "static/js/main.f884af44.js"
   ]
 }
