@@ -1,20 +1,19 @@
 import React, { useContext, useEffect, useState } from "react";
-import ContainerCard from "../containercard/ContainerCard";
+import CredentialsCard from "./credentialscad/CredentialsCard";
 import WebContext from "../../Context/WebDetails";
 import styles from "./DashBoard.module.css";
-import message_icon from "../../Images/message-icon.png";
 import Container from "react-bootstrap/Container";
+import CredCollapsed from "./credcollapsed/CredCollapsed";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import ShareCard from "./sharedlinkscard/ShareCard";
+import Messages from "./messageterminal/Messages";
 
 function DashBoard() {
   const context = useContext(WebContext);
-  const { token, darkMode } = context.WebDetails;
+  const { token, darkMode, isCredVisible } = context.WebDetails;
 
-  const [userId, setUserId] = useState("adfa");
-  const [pin, setPin] = useState("adfa");
-
-  const [showCreds, setShowCreds] = useState(true);
+  const [showCreds, setShowCreds] = useState(isCredVisible);
 
   useEffect(() => {
     // todo
@@ -26,50 +25,18 @@ function DashBoard() {
         <Row>
           <Col className={styles.mobileview}></Col>
           <Col>
-            <ContainerCard
-              style={{
-                border: darkMode
-                  ? "1px solid black"
-                  : "1px solid rgb(13,110,253)",
-                marginTop: "30px",
-                width: "100%",
-              }}>
-              <div className={styles.firsthalf}>
-                <img src={message_icon} alt="" />
-                <div className={styles.usercreds}>
-                  <span>
-                    User Id - <span>{userId}</span>
-                  </span>
-                  <span>
-                    Pin - <span>{pin}</span>
-                  </span>
-                </div>
-              </div>
-              <div className={styles.url_link}>https://localhost:3000/</div>
-              <div className={styles.bottompart}>
-                <p
-                  style={{
-                    textAlign: "center",
-                    fontSize: "18px",
-                    fontWeight: "bolder",
-                    marginBottom: "0px",
-                  }}>
-                  Please take a screenshot of these details
-                </p>
-                <p style={{ textAlign: "center" }}>
-                  You need these details to login from anywhere! PIN cannot be
-                  restored!
-                </p>
-              </div>
-              <div className={styles.closediv}>
-                <i
-                  className="fa-solid fa-xmark fa-lg"
-                  style={{
-                    color: "white",
-                  }}
-                />
-              </div>
-            </ContainerCard>
+            {showCreds ? (
+              <CredentialsCard
+                styles={styles}
+                token={token}
+                darkMode={darkMode}
+                setShowCred={setShowCreds}
+              />
+            ) : (
+              <CredCollapsed setShowCred={setShowCreds} />
+            )}
+            <ShareCard />
+            <Messages />
           </Col>
           <Col className={styles.mobileview}></Col>
         </Row>

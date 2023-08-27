@@ -93,3 +93,50 @@ input[type="checkbox"] {
   width: 100%;
   border-bottom: 1px solid rgb(0, 0, 0, 0.1);
 }
+
+p.title {
+  font-size: 25px;
+  font-weight: 800;
+  animation: animatedtext 2s linear infinite;
+  background: linear-gradient(
+    to right,
+    rgb(111, 173, 236),
+    hsla(287, 100%, 66%, 1) 100%
+  );
+  background-size: 200%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  white-space: nowrap;
+  font-size: 1.8rem;
+  font-weight: 800;
+}
+
+@keyframes animatedtext {
+  from {
+    background-position: 0% center;
+  }
+
+  to {
+    background-position: -200% center;
+  }
+}
+
+.info_text {
+  background: linear-gradient(
+    to right,
+    rgb(39, 136, 232),
+    hsla(287, 100%, 66%, 1) 100%
+  );
+  background-size: 200%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  white-space: nowrap;
+}
+
+p.loveeye {
+  font-size: 40px;
+  margin: 5px 0px;
+  margin-top: -15px;
+}

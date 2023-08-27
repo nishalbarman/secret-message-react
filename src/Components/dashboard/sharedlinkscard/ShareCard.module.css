@@ -1,0 +1,96 @@
+.animation {
+  animation: animatedtext 2s linear infinite;
+  /* background: #8a2be2; */
+  background: linear-gradient(
+    to right,
+    rgb(111, 173, 236),
+    hsla(287, 100%, 66%, 1) 100%
+  );
+  background-size: 200%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  white-space: nowrap;
+  font-size: 2rem;
+  font-weight: 800;
+}
+
+.hor_line {
+  border-bottom: 1px solid rgb(0, 0, 0, 0.1);
+  width: 100%;
+  margin: 12px 0px;
+  margin-top: 0px;
+}
+
+@keyframes animatedtext {
+  from {
+    background-position: 0% center;
+  }
+
+  to {
+    background-position: -200% center;
+  }
+}
+
+.copy_url {
+  padding: 7px;
+  background-color: rgb(233, 236, 239);
+  width: 100%;
+  text-align: center;
+  border: 2px solid rgb(13, 110, 253);
+  border-radius: 5px;
+  margin-bottom: 8px;
+}
+
+.sharebuttons {
+  width: 100%;
+  padding: 8px 0px;
+  outline: none;
+  border: none;
+  font-size: 17px;
+  border-radius: 5px;
+  margin-bottom: 6px;
+}
+
+.copy {
+  background-color: rgb(133, 133, 133);
+  color: white;
+  border: 1px solid rgb(133, 133, 133);
+}
+
+.whatsapp {
+  background-color: rgb(37, 211, 102);
+  color: white;
+  border: 1px solid rgb(37, 211, 102);
+}
+
+.messenger {
+  background-color: rgb(0, 132, 255);
+  color: white;
+  border: 1px solid rgb(0, 132, 255);
+}
+
+.messages {
+  margin-top: 5px;
+  background-color: rgb(21, 244, 239);
+  color: black;
+  border: 1px solid rgb(18, 214, 210);
+}
+
+.delete {
+  background-color: rgb(86, 86, 86);
+  color: white;
+  border: 1px solid rgb(86, 86, 86);
+}
+
+.sharebuttons:hover {
+  background-color: white;
+  border: 1px solid rgb(87, 165, 237);
+  color: rgb(87, 165, 237);
+}
+
+.delete:hover {
+  background-color: white;
+  border: 1px solid red;
+  color: red;
+}
