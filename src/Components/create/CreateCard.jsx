@@ -1,13 +1,17 @@
 import React, { useContext } from "react";
-import styles from "./CreateCard.module.css";
 import { Link } from "react-router-dom";
 import { WebContext } from "../../Context/WebDetails";
 import ContainerCard from "../containercard/ContainerCard";
+// import styles from "./CreateCard.module.css";
+import styles from "../commoncardstyles/CommonCardStyles.module.css";
 
 function CreateCard() {
   const webContext = useContext(WebContext);
-  const { WebDetails, setWebDetails } = webContext;
-  const { showAlert } = webContext.alert;
+  const {
+    WebDetails,
+    setWebDetails,
+    alert: { showAlert },
+  } = webContext;
 
   const handleCreateAccount = async (e) => {
     e.preventDefault();
@@ -27,9 +31,12 @@ function CreateCard() {
         showAlert(error.join(", "), "danger");
       } else {
         // do the fetch request here
-        const object = { ...WebDetails, token: Math.random() * 342 };
-        localStorage.setItem("z-story-obj", JSON.stringify(object));
-        setWebDetails(object);
+        setWebDetails((prev) => {
+          const object = { ...prev, token: Math.random() * 342 };
+          localStorage.setItem("z-story-obj", JSON.stringify(object));
+          return object;
+        });
+        showAlert("Account created.. Enjoy your day", "success");
       }
     } catch (err) {}
   };
@@ -37,10 +44,12 @@ function CreateCard() {
   return (
     <ContainerCard
       style={{
-        position: "absolute",
-        top: "50%",
-        left: "50%",
-        transform: "translate(-50%, -50%)",
+        // position: "absolute",
+        // top: "50%",
+        // left: "50%",
+        // transform: "translate(-50%, -50%)",
+        width: "100%",
+        marginTop: "30px",
       }}>
       <div className={styles.card}>
         <p className={styles.title}>Secret Messages 2023</p>
@@ -48,6 +57,7 @@ function CreateCard() {
         <p>Get anonymouse feedback from your freinds, coworkers and Fans.</p>
         <div className={styles.hor_line}></div>
         <p>
+          <p></p>
           <span
             style={{
               color: WebDetails.darkMode
@@ -55,12 +65,12 @@ function CreateCard() {
                 : "rgb(13,110,253)",
               textAlign: "left",
               width: "100%",
-              lineHeight: "40px",
             }}
             className={styles.info_text}>
             You can never know who messaged you! 🔮
           </span>
           <br />
+          <p></p>
           Please allow <strong>NOTIFICATION</strong> to receive notifications
           about new message.
         </p>
@@ -74,23 +84,31 @@ function CreateCard() {
             required={true}
             autoComplete="off"
           />
+
+          <label style={{ fontSize: "15px", marginBottom: "14px" }}>
+            <input
+              style={{
+                outline: "none",
+                display: "inline-block",
+                width: "15px",
+                height: "15px",
+                marginRight: "10px",
+              }}
+              className="agreeCheck"
+              type="checkbox"
+              name="agree"
+            />
+            By continuing, You agree to{" "}
+            <Link to="privacy-policy">Privacy Policy</Link> and{" "}
+            <Link to="terms_conditions">Terms and condition</Link> of our
+            website.
+          </label>
+
           <button
             type="submit"
             className={WebDetails.darkMode ? styles.darkbutton : ""}>
             Create your link 😍
           </button>
-          <input
-            style={{ outline: "none" }}
-            className="agreeCheck"
-            type="checkbox"
-            name="agree"
-          />
-          <p style={{ fontSize: "15px" }}>
-            By continuing, You agree to{" "}
-            <Link to="privacy-policy">Privacy Policy</Link> and{" "}
-            <Link to="terms_conditions">Terms and condition</Link> of our
-            website.
-          </p>
         </form>
       </div>
     </ContainerCard>

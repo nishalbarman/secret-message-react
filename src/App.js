@@ -6,15 +6,25 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { WebStates } from "./Context/WebDetails";
 import HomePage from "./Components/homepage/HomePage";
 import Alerts from "./Components/alert/Alerts";
+import Modals from "./Components/modal/Modals";
+import Login from "./Components/login/Login";
+import SendMessage from "./Components/sendmessage/SendMessage";
 
 function App() {
   return (
     <WebStates>
-      <Router>
+      <Router basename="/secret-message-react">
         <Navbars />
         <Alerts />
+        <Modals />
         <Routes>
-          <Route path="/" element={<HomePage />}></Route>
+          <Route exact path="/" element={<HomePage />}></Route>
+        </Routes>
+        <Routes>
+          <Route exact path="/login" element={<Login />}></Route>
+        </Routes>
+        <Routes>
+          <Route path="/m" element={<SendMessage />}></Route>
         </Routes>
       </Router>
     </WebStates>

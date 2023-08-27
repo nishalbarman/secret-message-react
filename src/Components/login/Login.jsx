@@ -2,16 +2,17 @@ import React from "react";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import CreateCard from "./CreateCard";
+import LoginCard from "./LoginCard.jsx";
+import styles from "./LoginCard.module.css";
 
-function CreateAccount() {
+function Login() {
   return (
     <>
       <Container>
         <Row>
           <Col className="mobilecol"></Col>
           <Col>
-            <CreateCard />
+            <LoginCard />
           </Col>
           <Col className="mobilecol"></Col>
         </Row>
@@ -20,4 +21,4 @@ function CreateAccount() {
   );
 }
 
-export default CreateAccount;
+export default Login;

@@ -12,12 +12,12 @@ import Messages from "./messageterminal/Messages";
 function DashBoard() {
   const context = useContext(WebContext);
   const { token, darkMode, isCredVisible } = context.WebDetails;
-
   const [showCreds, setShowCreds] = useState(isCredVisible);
+  const [ref, setRef] = useState(() => {});
 
   useEffect(() => {
     // todo
-  }, []);
+  }, [ref]);
 
   return (
     <>
@@ -25,7 +25,7 @@ function DashBoard() {
         <Row>
           <Col className={styles.mobileview}></Col>
           <Col>
-            {showCreds ? (
+            {!showCreds ? (
               <CredentialsCard
                 styles={styles}
                 token={token}
@@ -35,8 +35,9 @@ function DashBoard() {
             ) : (
               <CredCollapsed setShowCred={setShowCreds} />
             )}
-            <ShareCard />
-            <Messages />
+            <ShareCard callback={ref} />
+            <Messages setRef={setRef} />
+            <br />
           </Col>
           <Col className={styles.mobileview}></Col>
         </Row>

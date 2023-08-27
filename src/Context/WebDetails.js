@@ -3,17 +3,27 @@ import { useEffect, useState } from "react";
 
 const WebContext = createContext();
 const WebStates = ({ children }) => {
-  const [WebDetails, setWebDetails] = useState({ darkMode: false });
+  const [WebDetails, setWebDetails] = useState({
+    darkMode: false,
+    isCredVisible: false,
+  });
   const [alert, setAlert] = useState({
     isVisible: false,
     message: "",
     type: "",
   });
 
+  const [modal, setModal] = useState({
+    isModalVisible: false,
+    title: "",
+    message: "",
+    buttonText: "",
+    onClick: () => {},
+  });
+
   const showAlert = (message, type) => {
     const isVisible = true;
     let object = { message, type, isVisible };
-    console.log(object);
     setAlert(object);
     setTimeout(() => {
       console.log(alert);
@@ -27,12 +37,9 @@ const WebStates = ({ children }) => {
 
   useEffect(() => {
     const webDetails = JSON.parse(localStorage.getItem("z-story-obj"));
-
     if (webDetails) {
-      setWebDetails(webDetails);
-    } else {
-      setWebDetails({
-        darkMode: true,
+      setWebDetails((prev) => {
+        return { ...prev, ...webDetails };
       });
     }
   }, []);
@@ -45,6 +52,10 @@ const WebStates = ({ children }) => {
         alert: {
           alert: alert,
           showAlert: showAlert,
+        },
+        modal: {
+          modal: modal,
+          setModal: setModal,
         },
       }}>
       {children}

@@ -1,3 +1,14 @@
 * {
   box-sizing: border-box;
 }
+
+@media only screen and (max-width: 500px) {
+  .mobilecol {
+    display: none;
+  }
+
+  p.title,
+  .info_text {
+    white-space: normal;
+  }
+}

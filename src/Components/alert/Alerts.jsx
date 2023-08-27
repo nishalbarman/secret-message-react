@@ -11,8 +11,6 @@ function Alerts() {
     },
   } = useContext(WebContext);
 
-  console.log(isVisible);
-
   return (
     <>
       {isVisible ? (
