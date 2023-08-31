@@ -1,8 +1,7 @@
 import React, { useContext, useState } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { WebContext } from "../../Context/WebDetails";
 import ContainerCard from "../containercard/ContainerCard";
-// import styles from "./SendMessage.module.css";
 import styles from "../commoncardstyles/CommonCardStyles.module.css";
 
 function SendMForm() {
@@ -11,9 +10,16 @@ function SendMForm() {
     WebDetails,
     setWebDetails,
     alert: { showAlert },
+    baseurl,
+    serverbaseurl,
   } = webContext;
 
+  const navigate = useNavigate();
+
+  const [reciepientId, setReciepientId] = useState(useParams().reciepientId);
   const [recieverName, setRecieverName] = useState("Admin");
+
+  console.log("Reciepient ID => ", reciepientId);
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
@@ -35,17 +41,28 @@ function SendMForm() {
 
       if (error.length > 0) {
         showAlert(error.join(", "), "danger");
+      } else if (reciepientId === null || reciepientId === undefined) {
+        showAlert("Some technical error occured", "danger");
       } else {
+        // const res = await fetch(`${serverbaseurl}/sendmessage/${reciepientId}`);
+        // const data = await res.json();
+        const data = { status: 200, success: true };
+        if (data.status === 200 && data.success === true) {
+          showAlert("Message sent successfully", "success");
+          navigate(`/?r=${reciepientId}`);
+        } else {
+          showAlert("Some technical error occured", "danger");
+        }
       }
-    } catch (err) {}
+    } catch (err) {
+      showAlert("Some technical error occured", "danger");
+    }
   };
 
   return (
     <ContainerCard style={{ marginTop: "25px", width: "100%" }}>
       <div className={styles.card}>
         <p className={styles.title}>Send Secret Message to {recieverName}</p>
-        {/* <p>They will never know who messaged them 😉</p> */}
-        {/* <div className={styles.hor_line}></div> */}
         <p>
           <span
             style={{
@@ -83,8 +100,8 @@ function SendMForm() {
               name="agree"
             />
             By continuing, You agree to{" "}
-            <Link to="privacy-policy">Privacy Policy</Link> and{" "}
-            <Link to="terms_conditions">Terms and condition</Link> of our
+            <Link to="/privacy-policy">Privacy Policy</Link> and{" "}
+            <Link to="/terms_conditions">Terms and condition</Link> of our
             website.
           </label>
 

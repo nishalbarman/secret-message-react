@@ -1,5 +1,10 @@
-import React, { useContext } from "react";
-import { Link } from "react-router-dom";
+import React, { useContext, useEffect, useState } from "react";
+import {
+  Link,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import { WebContext } from "../../Context/WebDetails";
 import ContainerCard from "../containercard/ContainerCard";
 // import styles from "./CreateCard.module.css";
@@ -13,6 +18,10 @@ function CreateCard() {
     alert: { showAlert },
   } = webContext;
 
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [isReffered, setIsReffered] = useState(searchParams.get("r"));
+
+  console.log(isReffered);
   const handleCreateAccount = async (e) => {
     e.preventDefault();
     try {
@@ -32,7 +41,12 @@ function CreateCard() {
       } else {
         // do the fetch request here
         setWebDetails((prev) => {
-          const object = { ...prev, token: Math.random() * 342 };
+          const object = {
+            ...prev,
+            token: Math.random() * 342,
+            userId: Math.round(Math.random() * 999) + 999,
+            pin: Math.round(Math.random() * 242 + 1111),
+          };
           localStorage.setItem("z-story-obj", JSON.stringify(object));
           return object;
         });
@@ -41,23 +55,51 @@ function CreateCard() {
     } catch (err) {}
   };
 
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    document.title = "Create your link - Secret message sending 2023";
+  }, []);
+
   return (
     <ContainerCard
       style={{
-        // position: "absolute",
-        // top: "50%",
-        // left: "50%",
-        // transform: "translate(-50%, -50%)",
         width: "100%",
         marginTop: "30px",
       }}>
       <div className={styles.card}>
-        <p className={styles.title}>Secret Messages 2023</p>
-        <p className={styles.loveeye}>😍</p>
-        <p>Get anonymouse feedback from your freinds, coworkers and Fans.</p>
+        {isReffered === null ? (
+          <>
+            <p className={styles.title}>Secret Messages 2023</p>
+            <p className={styles.loveeye}>😍</p>
+            <p>
+              Get anonymouse feedback from your freinds, coworkers and Fans.
+            </p>
+          </>
+        ) : (
+          <>
+            <p
+              style={{
+                padding: "10px",
+                textAlign: "center",
+                backgroundColor: "#28a745",
+                color: "white",
+                width: "100%",
+                borderRadius: "5px",
+              }}>
+              ✔ Message sent successfully 👍
+            </p>
+            <p className={styles.loveeye}>😍</p>
+            <p>
+              Now, create a link for yourself. See what your friends message
+              you!
+            </p>
+          </>
+        )}
+
         <div className={styles.hor_line}></div>
         <p>
-          <p></p>
+          <span></span>
           <span
             style={{
               color: WebDetails.darkMode
@@ -70,7 +112,7 @@ function CreateCard() {
             You can never know who messaged you! 🔮
           </span>
           <br />
-          <p></p>
+          <span></span>
           Please allow <strong>NOTIFICATION</strong> to receive notifications
           about new message.
         </p>
@@ -85,6 +127,11 @@ function CreateCard() {
             autoComplete="off"
           />
 
+          <button
+            type="submit"
+            className={WebDetails.darkMode ? styles.darkbutton : ""}>
+            Create your link 😍
+          </button>
           <label style={{ fontSize: "15px", marginBottom: "14px" }}>
             <input
               style={{
@@ -99,16 +146,10 @@ function CreateCard() {
               name="agree"
             />
             By continuing, You agree to{" "}
-            <Link to="privacy-policy">Privacy Policy</Link> and{" "}
+            <Link to="privacy_policy">Privacy Policy</Link> and{" "}
             <Link to="terms_conditions">Terms and condition</Link> of our
             website.
           </label>
-
-          <button
-            type="submit"
-            className={WebDetails.darkMode ? styles.darkbutton : ""}>
-            Create your link 😍
-          </button>
         </form>
       </div>
     </ContainerCard>

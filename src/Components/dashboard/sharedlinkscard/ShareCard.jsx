@@ -1,35 +1,31 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import ContainerCard from "../../containercard/ContainerCard";
 import styles from "./ShareCard.module.css";
 import copy from "copy-to-clipboard";
 import WebContext from "../../../Context/WebDetails";
-import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 function ShareCard({ callback }) {
   const {
+    WebDetails: { userId: recipientID },
     modal: { setModal },
     setWebDetails,
     alert: { showAlert },
+    baseurl,
   } = useContext(WebContext);
 
   const handleMessageTerminal = () => {
     callback?.current.scrollIntoView({ behavior: "smooth" });
   };
 
-  const messagingLink = "http://localhost:3000/m/qqdafq45";
   const handleCopy = () => {
     try {
-      copy(messagingLink);
+      copy(`${baseurl}/m/${recipientID}`);
       alert("Link copied to clipboard! Paste it and have fun!");
     } catch (er) {
-      // window.clipboardData.setData(messagingLink);
-      // navigator.clipboard.writeText(messagingLink);
-      // alert("Link copied to clipboard! Paste it and have fun!");
       alert("Error occured");
     }
   };
-
-  const navigate = useNavigate();
 
   const handleDeleteAccount = () => {
     setModal((prev) => {
@@ -54,6 +50,7 @@ function ShareCard({ callback }) {
       return object;
     });
   };
+
   return (
     <ContainerCard
       style={{
@@ -67,7 +64,7 @@ function ShareCard({ callback }) {
       </p>
       <div className={styles.hor_line}></div>
       <p onClick={handleCopy} className={styles.copy_url}>
-        {messagingLink}
+        {`${baseurl}/m/${recipientID}`}
       </p>
       <button
         onClick={handleCopy}
@@ -75,11 +72,27 @@ function ShareCard({ callback }) {
         <i className="fa-solid fa-copy fa-lg" />
         &nbsp;&nbsp;Copy To Clipboard
       </button>
-      <button className={`${styles.sharebuttons} ${styles.whatsapp}`}>
+      <button
+        onClick={() => {
+          window.open(
+            `whatsapp://send?text=%2ASend%20a%20secret%20message%20to%20me%21%2A%0AIt%E2%80%99s%20fun%20%F0%9F%98%82%0A_I%20will%20never%20know%20who%20sent%20it_%20%F0%9F%99%88%0A${baseurl}/m/${recipientID}`,
+            "_blank",
+            "noreferrer"
+          );
+        }}
+        className={`${styles.sharebuttons} ${styles.whatsapp}`}>
         <i className="fa-brands fa-whatsapp fa-lg" />
         &nbsp;&nbsp;Share To Whatspp
       </button>
-      <button className={`${styles.sharebuttons} ${styles.messenger}`}>
+      <button
+        onClick={() => {
+          window.open(
+            `https://www.addtoany.com/add_to/facebook_messenger?linkurl=${baseurl}/m/${recipientID}&amp;linkname=`,
+            "_blank",
+            "noreferrer"
+          );
+        }}
+        className={`${styles.sharebuttons} ${styles.messenger}`}>
         <i className="fa-brands fa-facebook-messenger fa-lg" />
         &nbsp;&nbsp;Share To Messenger
       </button>

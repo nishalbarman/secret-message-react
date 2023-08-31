@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 // import styles from "./LoginCard.module.css";
 import { Link } from "react-router-dom";
 import { WebContext } from "../../Context/WebDetails";
@@ -43,6 +43,10 @@ function LoginCard() {
     } catch (err) {}
   };
 
+  useEffect(() => {
+    document.title = "Login to account - Secret message sending 2023";
+  }, []);
+
   return (
     <ContainerCard
       style={{
@@ -55,7 +59,7 @@ function LoginCard() {
         <p>Get anonymouse feedback from your freinds, coworkers and Fans.</p>
         <div className={styles.hor_line}></div>
         <p>
-          <p></p>
+          <span></span>
           <span
             style={{
               color: WebDetails.darkMode

@@ -17,7 +17,8 @@ function DashBoard() {
 
   useEffect(() => {
     // todo
-  }, [ref]);
+    document.title = "Inbox - Secret message sending 2023";
+  }, []);
 
   return (
     <>

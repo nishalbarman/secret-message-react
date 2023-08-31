@@ -4,11 +4,12 @@ import message_icon from "../../../Images/message-icon.png";
 import WebContext from "../../../Context/WebDetails";
 
 function CredentialsCard({ styles, token, darkMode, setShowCred }) {
-  const [userId, setUserId] = useState("adfa");
-  const [pin, setPin] = useState("adfa");
+  // const [userId, setUserId] = useState("adfa");
+  // const [pin, setPin] = useState("adfa");
 
   const context = useContext(WebContext);
-  const { WebDetails } = context;
+  const { WebDetails, baseurl } = context;
+  const { userId, pin } = WebDetails;
 
   return (
     <ContainerCard
@@ -28,7 +29,7 @@ function CredentialsCard({ styles, token, darkMode, setShowCred }) {
           </span>
         </div>
       </div>
-      <div className={styles.url_link}>https://localhost:3000/</div>
+      <div className={styles.url_link}>{baseurl}</div>
       <div className={styles.bottompart}>
         <p
           style={{

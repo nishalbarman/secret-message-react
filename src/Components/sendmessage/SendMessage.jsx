@@ -3,7 +3,6 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import SendMForm from "./SendMForm.jsx";
-import styles from "./SendMessage.module.css";
 
 function SendMessage() {
   return (

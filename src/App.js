@@ -18,13 +18,13 @@ function App() {
         <Alerts />
         <Modals />
         <Routes>
-          <Route exact path="/" element={<HomePage />}></Route>
+          <Route path="/" element={<HomePage />}></Route>
         </Routes>
         <Routes>
-          <Route exact path="/login" element={<Login />}></Route>
+          <Route path="/login" element={<Login />}></Route>
         </Routes>
         <Routes>
-          <Route path="/m" element={<SendMessage />}></Route>
+          <Route path="/m/:reciepientId" element={<SendMessage />}></Route>
         </Routes>
       </Router>
     </WebStates>

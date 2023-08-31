@@ -44,6 +44,9 @@ const WebStates = ({ children }) => {
     }
   }, []);
 
+  const baseurl = "http://localhost:3000";
+  const serverbaseurl = "http://localhost:3001";
+
   return (
     <WebContext.Provider
       value={{
@@ -57,6 +60,8 @@ const WebStates = ({ children }) => {
           modal: modal,
           setModal: setModal,
         },
+        baseurl: baseurl,
+        serverbaseurl: serverbaseurl,
       }}>
       {children}
     </WebContext.Provider>
