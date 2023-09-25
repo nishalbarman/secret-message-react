@@ -44,8 +44,9 @@ const WebStates = ({ children }) => {
     }
   }, []);
 
-  const baseurl = process.env.REACT_CLIENT_URL || "http://localhost:3000";
-  const serverbaseurl = process.env.REACT_SERVER_URL || "http://localhost:8000";
+  const baseurl = process.env.REACT_APP_CLIENT_URL || "http://localhost:3000";
+  const serverbaseurl =
+    process.env.REACT_APP_SERVER_URL || "http://localhost:8000";
 
   return (
     <WebContext.Provider

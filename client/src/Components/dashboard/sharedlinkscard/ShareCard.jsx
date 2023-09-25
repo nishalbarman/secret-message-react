@@ -86,7 +86,7 @@ function ShareCard({ callback }) {
       <button
         onClick={() => {
           window.open(
-            `whatsapp://send?text=%2ASend%20a%20secret%20message%20to%20me%21%2A%0AIt%E2%80%99s%20fun%20%F0%9F%98%82%0A_I%20will%20never%20know%20who%20sent%20it_%20%F0%9F%99%88%0A${baseurl}/m/${recipientID}`,
+            `whatsapp://send?text=%2ASend%20a%20secret%20message%20to%20me%21%2A%0AIt%E2%80%99s%20fun%20%F0%9F%98%82%0A_I%20will%20never%20know%20who%20sent%20it_%20%F0%9F%99%88%0A${baseurl}/m/${recipientID}/${name}`,
             "_blank",
             "noreferrer"
           );
@@ -98,7 +98,7 @@ function ShareCard({ callback }) {
       <button
         onClick={() => {
           window.open(
-            `https://www.addtoany.com/add_to/facebook_messenger?linkurl=${baseurl}/m/${recipientID}&amp;linkname=`,
+            `https://www.addtoany.com/add_to/facebook_messenger?linkurl=${baseurl}/m/${recipientID}/${name}&amp;linkname=`,
             "_blank",
             "noreferrer"
           );

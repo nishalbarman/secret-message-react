@@ -20,7 +20,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "cross-env GENERATE_SOURCEMAP=false react-scripts build && echo /* /index.htm 200 > _redirects",
+    "build": "cross-env GENERATE_SOURCEMAP=false react-scripts build && echo /* /index.html 200 > _redirects",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
