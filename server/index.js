@@ -24,7 +24,7 @@ app.use(
     optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
   })
 ); // cros origin resource sharing
-app.use(morgan("combined", { stream: accessLogStream }));
+// app.use(morgan("combined", { stream: accessLogStream }));
 app.use(express.json());
 
 app.use("/auth", authenticationRoute);
