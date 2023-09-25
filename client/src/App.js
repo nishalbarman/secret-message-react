@@ -13,7 +13,7 @@ import SendMessage from "./Components/sendmessage/SendMessage";
 function App() {
   return (
     <WebStates>
-      <Router basename="/secret-message-react">
+      <Router>
         <Navbars />
         <Alerts />
         <Modals />
@@ -24,7 +24,9 @@ function App() {
           <Route path="/login" element={<Login />}></Route>
         </Routes>
         <Routes>
-          <Route path="/m/:reciepientId" element={<SendMessage />}></Route>
+          <Route
+            path="/m/:reciepientId/:name"
+            element={<SendMessage />}></Route>
         </Routes>
       </Router>
     </WebStates>

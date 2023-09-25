@@ -69,7 +69,6 @@ function Navbars() {
                 }
                 onClick={() => {
                   setWebDetails((object) => {
-                    // let obj = { ...object, token: false };
                     localStorage.removeItem("z-story-obj");
                     return {
                       darkMode: false,

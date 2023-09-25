@@ -7,21 +7,20 @@ import {
 } from "react-router-dom";
 import { WebContext } from "../../Context/WebDetails";
 import ContainerCard from "../containercard/ContainerCard";
-// import styles from "./CreateCard.module.css";
+import axios from "axios";
 import styles from "../commoncardstyles/CommonCardStyles.module.css";
 
 function CreateCard() {
-  const webContext = useContext(WebContext);
   const {
     WebDetails,
     setWebDetails,
     alert: { showAlert },
-  } = webContext;
+    serverbaseurl,
+  } = useContext(WebContext);
 
   const [searchParams, setSearchParams] = useSearchParams();
   const [isReffered, setIsReffered] = useState(searchParams.get("r"));
 
-  console.log(isReffered);
   const handleCreateAccount = async (e) => {
     e.preventDefault();
     try {
@@ -40,17 +39,27 @@ function CreateCard() {
         showAlert(error.join(", "), "danger");
       } else {
         // do the fetch request here
-        setWebDetails((prev) => {
-          const object = {
-            ...prev,
-            token: Math.random() * 342,
-            userId: Math.round(Math.random() * 999) + 999,
-            pin: Math.round(Math.random() * 242 + 1111),
-          };
-          localStorage.setItem("z-story-obj", JSON.stringify(object));
-          return object;
+        console.log(serverbaseurl);
+        const res = await axios.post(`${serverbaseurl}/auth/signup`, {
+          name,
         });
-        showAlert("Account created.. Enjoy your day", "success");
+        console.log(res);
+        if (res.status === 200) {
+          setWebDetails((prev) => {
+            const object = {
+              ...prev,
+              token: res.data.token,
+              userId: res.data.uid,
+              pin: res.data.password,
+              name: res.data.name,
+            };
+            localStorage.setItem("z-story-obj", JSON.stringify(object));
+            return object;
+          });
+          showAlert("Account created.. Enjoy your day", "success");
+        } else {
+          showAlert("Account creation failed", "danger");
+        }
       }
     } catch (err) {}
   };

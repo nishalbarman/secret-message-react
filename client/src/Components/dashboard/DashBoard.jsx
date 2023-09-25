@@ -37,7 +37,7 @@ function DashBoard() {
               <CredCollapsed setShowCred={setShowCreds} />
             )}
             <ShareCard callback={ref} />
-            <Messages setRef={setRef} />
+            <Messages setRef={setRef} context={context} />
             <br />
           </Col>
           <Col className={styles.mobileview}></Col>

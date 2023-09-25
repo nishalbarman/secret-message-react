@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from "react";
-// import styles from "./LoginCard.module.css";
-import { Link } from "react-router-dom";
+import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
 import { WebContext } from "../../Context/WebDetails";
 import ContainerCard from "../containercard/ContainerCard";
 import styles from "../commoncardstyles/CommonCardStyles.module.css";
@@ -11,7 +11,13 @@ function LoginCard() {
     WebDetails,
     setWebDetails,
     alert: { showAlert },
+    serverbaseurl,
   } = webContext;
+
+  const navigate = useNavigate();
+  if (WebDetails.token) {
+    navigate("/");
+  }
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -33,12 +39,27 @@ function LoginCard() {
         showAlert(error.join(", "), "danger");
       } else {
         // do the fetch request here
-        // setWebDetails((prev) => {
-        //   const object = { ...prev, token: Math.random() * 342 };
-        //   localStorage.setItem("z-story-obj", JSON.stringify(object));
-        //   return object;
-        // });
-        // showAlert("Account created.. Enjoy your day", "success");
+        const res = await axios.post(`${serverbaseurl}/auth/login`, {
+          userid: userid.value,
+          userpin: userpin.value,
+        });
+        if (res.status === 200) {
+          console.log(res);
+          setWebDetails((prev) => {
+            const object = {
+              ...prev,
+              token: res.data.token,
+              userId: res.data.uid,
+              pin: res.data.password,
+              name: res.data.name,
+            };
+            localStorage.setItem("z-story-obj", JSON.stringify(object));
+            return object;
+          });
+          showAlert("Login successfull", "success");
+        } else {
+          showAlert("Login failed", "danger");
+        }
       }
     } catch (err) {}
   };

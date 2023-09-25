@@ -33,13 +33,17 @@
 }
 
 .copy_url {
-  padding: 7px;
+  padding: 7px 15px;
   background-color: rgb(233, 236, 239);
   width: 100%;
   text-align: center;
   border: 2px solid rgb(13, 110, 253);
   border-radius: 5px;
   margin-bottom: 8px;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
 }
 
 .sharebuttons {

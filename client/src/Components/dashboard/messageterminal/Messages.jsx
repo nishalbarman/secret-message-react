@@ -1,19 +1,42 @@
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 import styles from "./Messages.module.css";
 import ContainerCard from "../../containercard/ContainerCard";
 import MessageCard from "./messagecard/MessageCard";
 import { useRef } from "react";
 
-function Messages({ setRef }) {
+function Messages({ setRef, context }) {
   const colorList = ["rgb(240,47,76)", "rgb(0,172,238)"];
   const [messageList, setMessageList] = useState([]);
 
   const ref = useRef(null);
 
+  const getMessages = async () => {
+    try {
+      const res = await axios.get(`${context.serverbaseurl}/m`, {
+        headers: {
+          "Auth-Token": context.WebDetails.token,
+        },
+      });
+      console.log(res);
+      if (res.status === 200) {
+        setMessageList(res.data);
+      }
+    } catch (error) {}
+  };
+
   useEffect(() => {
     setRef(() => {
       return ref;
     });
+    getMessages();
+    let id = setInterval(() => {
+      getMessages();
+    }, 30000);
+
+    return () => {
+      clearInterval(id);
+    };
   }, []);
 
   return (
@@ -34,7 +57,7 @@ function Messages({ setRef }) {
                   backgroundColor: `${colorList[Math.round(Math.random())]}`,
                   color: "white",
                 }}
-                message={msg.title}
+                message={msg.message}
               />
             );
           })

@@ -3,15 +3,17 @@ import ContainerCard from "../../containercard/ContainerCard";
 import styles from "./ShareCard.module.css";
 import copy from "copy-to-clipboard";
 import WebContext from "../../../Context/WebDetails";
-import { useParams } from "react-router-dom";
+// import { useParams } from "react-router-dom";
+import axios from "axios";
 
 function ShareCard({ callback }) {
   const {
-    WebDetails: { userId: recipientID },
+    WebDetails: { userId: recipientID, name, token },
     modal: { setModal },
     setWebDetails,
     alert: { showAlert },
     baseurl,
+    serverbaseurl,
   } = useContext(WebContext);
 
   const handleMessageTerminal = () => {
@@ -20,7 +22,7 @@ function ShareCard({ callback }) {
 
   const handleCopy = () => {
     try {
-      copy(`${baseurl}/m/${recipientID}`);
+      copy(`${baseurl}/m/${recipientID}/${name}`);
       alert("Link copied to clipboard! Paste it and have fun!");
     } catch (er) {
       alert("Error occured");
@@ -35,16 +37,25 @@ function ShareCard({ callback }) {
           "Are you sure, you want to continue? Deleting your account will erase all the messages and details related to this account...",
         isModalVisible: true,
         buttonText: "Delete Account",
-        handleDelete: () => {
-          // handle delete is remaining
-          setModal({ ...prev, isModalVisible: false });
-          console.log("delete button clicked");
-          localStorage.removeItem("z-story-obj");
-          setWebDetails({});
-          showAlert(
-            "Thank You for joining, your account is deleted now..",
-            "success"
-          );
+        handleDelete: async () => {
+          try {
+            // handle delete is remaining
+            const res = await axios.delete(`${serverbaseurl}/auth/delete`, {
+              headers: {
+                "Auth-Token": token,
+              },
+            });
+            setModal({ ...prev, isModalVisible: false });
+            console.log("delete button clicked");
+            localStorage.removeItem("z-story-obj");
+            setWebDetails({});
+            showAlert(
+              "Thank You for joining, your account is deleted now..",
+              "success"
+            );
+          } catch (error) {
+            console.log(error);
+          }
         },
       };
       return object;
