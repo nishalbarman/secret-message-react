@@ -20,11 +20,12 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "cross-env GENERATE_SOURCEMAP=false react-scripts build && echo /* /index.html 200 > _redirects",
+    "build": "cross-env GENERATE_SOURCEMAP=false react-scripts build && echo /* /index.html 200 > build/_redirects",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d build",
+    "netlify": "npm run build && netlify deploy --prod"
   },
   "eslintConfig": {
     "extends": [
