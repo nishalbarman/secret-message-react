@@ -1,13 +1,11 @@
 const mongoose = require("mongoose");
 const { Schema } = require("mongoose");
 
-mongoose
-  .connect(
-    "mongodb+srv://project-playo:hSps3JdhvSTEYpPbkWQDMlcPxbsP3Ltq@project-playo.z9knmzk.mongodb.net/secret-messaging?retryWrites=true&w=majority"
-  )
-  .catch((error) => {
-    console.error("Mongo connection issue => ", error);
-  });
+const string = process.env.MOGNO_CONNECTION_STRING || "Your connections String";
+
+mongoose.connect(string).catch((error) => {
+  console.error("Mongo connection issue => ", error);
+});
 
 mongoose.connection.on("error", (err) => {
   console.error("Mongo connection issue => ", err);
