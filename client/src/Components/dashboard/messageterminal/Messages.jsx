@@ -68,7 +68,7 @@ function Messages({ setRef, context }) {
               <MessageCard
                 key={i}
                 style={{
-                  backgroundColor: `${colorList[i % 2]}`,
+                  // backgroundColor: `${colorList[i % 2]}`,
                   color: "white",
                 }}
                 message={msg.message}
