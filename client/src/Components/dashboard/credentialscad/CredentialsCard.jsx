@@ -1,6 +1,6 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import ContainerCard from "../../containercard/ContainerCard";
-import message_icon from "../../../Images/message-icon.png";
+// import message_icon from "../../../Images/message-icon.png";
 import WebContext from "../../../Context/WebDetails";
 
 function CredentialsCard({ styles, token, darkMode, setShowCred }) {
@@ -19,7 +19,7 @@ function CredentialsCard({ styles, token, darkMode, setShowCred }) {
         width: "100%",
       }}>
       <div className={styles.firsthalf}>
-        <img src={message_icon} alt="" />
+        {/* <img src={message_icon} alt="" /> */}
         <div className={styles.usercreds}>
           <span>
             User Id - <span>{userId}</span>
