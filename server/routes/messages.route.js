@@ -41,7 +41,7 @@ router.get("/", verifyToken, async (req, res) => {
 router.post("/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const user = await User.where({ _id: id }).findOne();
+    const user = await User.where({ _id: id }).findOne().sort({ date: "desc" });
     if (user === null) {
       res.send(new createResponseObject(404, "Invalid"));
     } else {
