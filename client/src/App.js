@@ -1,5 +1,5 @@
 import "./App.css";
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Navbars from "./Components/navbar/Navbar";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -11,19 +11,18 @@ import Login from "./Components/login/Login";
 import SendMessage from "./Components/sendmessage/SendMessage";
 
 function App() {
+  useEffect(() => {
+    console.clear();
+  }, []);
   return (
     <WebStates>
       <Router>
         <Navbars />
-        <Alerts />
+        {/* <Alerts /> */}
         <Modals />
         <Routes>
           <Route path="/" element={<HomePage />}></Route>
-        </Routes>
-        <Routes>
           <Route path="/login" element={<Login />}></Route>
-        </Routes>
-        <Routes>
           <Route
             path="/m/:reciepientId/:name"
             element={<SendMessage />}></Route>

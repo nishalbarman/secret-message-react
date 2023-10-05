@@ -1,4 +1,5 @@
 const { Router } = require("express");
+const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const { randomInt } = require("crypto");
 const jwt = require("jsonwebtoken");
@@ -10,13 +11,6 @@ const router = Router();
 
 const secret = process.env.SECRET || "692167";
 
-// constructor function
-function createResponseObject(statusCode, message, token) {
-  this.statusCode = statusCode || 200;
-  this.message = message || null;
-  this.token = token || null;
-}
-
 const verifyToken = (req, res, next) => {
   try {
     const token = req.get("Auth-Token");
@@ -27,8 +21,7 @@ const verifyToken = (req, res, next) => {
 
     next();
   } catch (er) {
-    const response = new createResponseObject(400, "Unauthorised Access");
-    res.send(response);
+    res.send(400, { status: false, message: "Unauthorised Access" });
   }
 };
 
@@ -55,6 +48,7 @@ router.post("/signup", (req, res) => {
           { expiresIn: "240h" }
         ); // json web token
         res.send({
+          status: true,
           uid: userObject._id,
           password: userObject.password,
           token: token,
@@ -68,59 +62,65 @@ router.post("/signup", (req, res) => {
 });
 
 // login route
-router.post("/login", (req, res) => {
-  const { userid, userpin } = req.body;
-  User.findOne()
-    .byUserIdPassword(userid, userpin)
-    .exec()
-    .then((userObject) => {
-      console.log("After search on mogoose data => ", userObject);
-      if (userObject === null || typeof userObject !== "object") {
-        const response = new createResponseObject(
-          200,
-          "User credintials invalid!"
-        );
-        console.log("Login failed ", response);
-        res.send(response);
-      } else {
-        const token = jwt.sign(
-          {
-            name: userObject.name,
-            _id: userObject._id,
-            password: userObject.password,
-          },
-          secret,
-          { expiresIn: "240h" }
-        ); // json web token
+router.post("/login", async (req, res) => {
+  try {
+    const { userid, userpin } = req.body;
+    const userObject = await User.findOne()
+      .byUserIdPassword(userid, userpin)
+      .exec();
 
-        res.send({
-          uid: userObject._id,
-          password: userObject.password,
-          token: token,
-          name: userObject.name,
-        });
-      }
+    if (userObject === null) {
+      return res.send({ status: false, message: "Invalid Credinitals!" });
+    }
+    // let's create a token because he is authenticated
+    const token = jwt.sign(
+      {
+        name: userObject.name,
+        _id: userObject._id,
+        password: userObject.password,
+      },
+      secret,
+      { expiresIn: "240h" }
+    );
+
+    res.send({
+      status: true,
+      uid: userObject._id,
+      password: userObject.password,
+      token: token,
+      name: userObject.name,
     });
+  } catch (er) {
+    if (er instanceof mongoose.MongooseError)
+      res.send({ status: false, message: "Invalid Credinitals!" });
+    else {
+      res.sendStatus(500);
+    }
+  }
 });
 
 // delete route
 router.delete("/delete", verifyToken, async (req, res) => {
   try {
     console.log(req.userid, req.userpass);
-    const user = await User.deleteOne({
+    const userDel = User.deleteOne({
       _id: req.userid,
       password: req.userpass,
     });
 
-    console.log(user);
-
-    const msg = await Message.deleteMany({
+    const msgDel = Message.deleteMany({
       uid: req.userid,
     });
 
-    res.send();
+    Promise.all([userDel, msgDel]).then((data) => {
+      res.send({ status: true, message: "Your account has been deleted!" });
+    });
   } catch (er) {
     console.log("Delete error => ", er);
+    res.send({
+      status: false,
+      message: "Oh No, there is a problem with deletion!",
+    });
   }
 });
 

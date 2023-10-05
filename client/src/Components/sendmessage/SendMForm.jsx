@@ -3,17 +3,15 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { WebContext } from "../../Context/WebDetails";
 import ContainerCard from "../containercard/ContainerCard";
 import { socket } from "../../socket";
+import { Button } from "@chakra-ui/react";
+import { useToast } from "@chakra-ui/react";
 import styles from "../commoncardstyles/CommonCardStyles.module.css";
 
 function SendMForm() {
+  const [loading, setLoading] = useState(false);
+
   const webContext = useContext(WebContext);
-  const {
-    WebDetails,
-    setWebDetails,
-    alert: { showAlert },
-    baseurl,
-    serverbaseurl,
-  } = webContext;
+  const { WebDetails } = webContext;
 
   const navigate = useNavigate();
 
@@ -21,10 +19,13 @@ function SendMForm() {
     navigate("/");
   }
 
+  const toast = useToast();
+
   const [reciepientId, setReciepientId] = useState(useParams().reciepientId);
   const [recieverName, setRecieverName] = useState(useParams().name);
 
   const handleSendMessage = async (e) => {
+    setLoading(true);
     e.preventDefault();
     try {
       const message = e.target.messagefreciver;
@@ -43,23 +44,59 @@ function SendMForm() {
       }
 
       if (error.length > 0) {
-        showAlert(error.join(", "), "danger");
-      } else if (reciepientId === null || reciepientId === undefined) {
-        showAlert("Some technical error occured", "danger");
-      } else {
-        socket.emit("new-anonymouse-message", {
-          uid: reciepientId,
-          message: message.value,
+        toast({
+          position: "top",
+          title: "Required:",
+          description: error.join(", "),
+          status: "info",
+          duration: 5000,
+          isClosable: true,
         });
+        setLoading(false);
+      } else if (reciepientId === null || reciepientId === undefined) {
+        toast({
+          position: "top",
+          title: "Required fileds are missing!",
+          status: "warn",
+          duration: 5000,
+          isClosable: true,
+        });
+        setLoading(false);
+      } else {
+        socket.emit(
+          "new-anonymouse-message",
+          {
+            uid: reciepientId,
+            message: message.value,
+          },
+          (response) => {
+            console.log(response);
+          }
+        );
       }
     } catch (err) {
-      showAlert("Some technical error occured", "danger");
+      toast({
+        position: "top",
+        title: "Failed!",
+        description: "Please try again later!",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+      setLoading(false);
     }
   };
 
   socket.on("response-back", (data) => {
-    showAlert(data.message, "success");
-    if (data.success) {
+    toast({
+      position: "top",
+      title: data.message,
+      status: data.status ? "success" : "error",
+      duration: 5000,
+      isClosable: true,
+    });
+    setLoading(false);
+    if (data.status === true) {
       navigate(`/?r=${reciepientId}`);
     }
   });
@@ -70,6 +107,7 @@ function SendMForm() {
     }
 
     return () => {
+      socket.off("response-back");
       socket.disconnect();
     };
   }, []);
@@ -123,11 +161,15 @@ function SendMForm() {
             website.
           </label>
 
-          <button
+          <Button
+            className={WebDetails.darkMode ? styles.darkbutton : ""}
+            isLoading={loading}
             type="submit"
-            className={WebDetails.darkMode ? styles.darkbutton : ""}>
+            loadingText="Please Wait"
+            colorScheme="blue"
+            variant="outline">
             Send the message 😎
-          </button>
+          </Button>
         </form>
         <div className={styles.hor_line} style={{ margin: "20px 0px" }}></div>
         <h1

@@ -3,7 +3,7 @@ import ContainerCard from "../../containercard/ContainerCard";
 import styles from "./ShareCard.module.css";
 import copy from "copy-to-clipboard";
 import WebContext from "../../../Context/WebDetails";
-// import { useParams } from "react-router-dom";
+import { useToast } from "@chakra-ui/react";
 import axios from "axios";
 
 function ShareCard({ callback }) {
@@ -11,10 +11,11 @@ function ShareCard({ callback }) {
     WebDetails: { userId: recipientID, name, token },
     modal: { setModal },
     setWebDetails,
-    alert: { showAlert },
     baseurl,
     serverbaseurl,
   } = useContext(WebContext);
+
+  const toast = useToast();
 
   const handleMessageTerminal = () => {
     callback?.current.scrollIntoView({ behavior: "smooth" });
@@ -23,9 +24,22 @@ function ShareCard({ callback }) {
   const handleCopy = () => {
     try {
       copy(`${baseurl}/m/${recipientID}/${name}`);
-      alert("Link copied to clipboard! Paste it and have fun!");
+      toast({
+        position: "top",
+        title: "Copied:",
+        description: "Link copied to clipboard! Paste it and have fun!",
+        status: "warning",
+        duration: 5000,
+        isClosable: true,
+      });
     } catch (er) {
-      alert("Error occured");
+      toast({
+        position: "top",
+        title: "There is an error",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
     }
   };
 
@@ -46,15 +60,27 @@ function ShareCard({ callback }) {
               },
             });
             setModal({ ...prev, isModalVisible: false });
-            console.log("delete button clicked");
+
             localStorage.removeItem("z-story-obj");
             setWebDetails({});
-            showAlert(
-              "Thank You for joining, your account is deleted now..",
-              "success"
-            );
+            toast({
+              position: "top",
+              title: "Deletion successful:",
+              description:
+                "Thank You for joining, your account has been deleted now.",
+              status: "success",
+              duration: 5000,
+              isClosable: true,
+            });
           } catch (error) {
-            console.log(error);
+            toast({
+              position: "top",
+              title: "Try again",
+              description: "Oh NO! there is an issue with deletion.",
+              status: "warning",
+              duration: 5000,
+              isClosable: true,
+            });
           }
         },
       };

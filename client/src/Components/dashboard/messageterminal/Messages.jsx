@@ -1,17 +1,22 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import styles from "./Messages.module.css";
 import ContainerCard from "../../containercard/ContainerCard";
 import MessageCard from "./messagecard/MessageCard";
 import { useRef } from "react";
+import { useToast } from "@chakra-ui/react";
 
 import { socket } from "../../../socket";
+import WebContext from "../../../Context/WebDetails";
 
 function Messages({ setRef, context }) {
-  const colorList = ["rgb(240,47,76)", "rgb(0,172,238)"];
+  const webContext = useContext(WebContext);
+
   const [messageList, setMessageList] = useState([]);
 
   const ref = useRef(null);
+
+  const toast = useToast();
 
   const getMessages = async () => {
     try {
@@ -20,7 +25,7 @@ function Messages({ setRef, context }) {
           "Auth-Token": context.WebDetails.token,
         },
       });
-      console.log(res);
+
       if (res.status === 200) {
         setMessageList(res.data);
       }
@@ -33,7 +38,19 @@ function Messages({ setRef, context }) {
   });
 
   socket.on("wrong_token", (message) => {
-    console.log("Recieved wrong message => ", message);
+    toast({
+      position: "top",
+      title: "Unauthorised access!",
+      status: "warning",
+      duration: 5000,
+      isClosable: true,
+    });
+    webContext.setWebDetails(() => {
+      localStorage.removeItem("z-story-obj");
+      return {
+        darkMode: false,
+      };
+    });
   });
 
   useEffect(() => {

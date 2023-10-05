@@ -1,27 +1,24 @@
 import React, { useContext, useEffect, useState } from "react";
-import {
-  Link,
-  useNavigate,
-  useParams,
-  useSearchParams,
-} from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { WebContext } from "../../Context/WebDetails";
 import ContainerCard from "../containercard/ContainerCard";
 import axios from "axios";
+import { Button } from "@chakra-ui/react";
+import { useToast } from "@chakra-ui/react";
 import styles from "../commoncardstyles/CommonCardStyles.module.css";
 
 function CreateCard() {
-  const {
-    WebDetails,
-    setWebDetails,
-    alert: { showAlert },
-    serverbaseurl,
-  } = useContext(WebContext);
+  const [loading, setLoading] = useState(false);
+
+  const { WebDetails, setWebDetails, serverbaseurl } = useContext(WebContext);
+
+  const toast = useToast();
 
   const [searchParams, setSearchParams] = useSearchParams();
   const [isReffered, setIsReffered] = useState(searchParams.get("r"));
 
   const handleCreateAccount = async (e) => {
+    setLoading(true);
     e.preventDefault();
     try {
       const name = e.target.username.value;
@@ -36,15 +33,20 @@ function CreateCard() {
       }
 
       if (error.length > 0) {
-        showAlert(error.join(", "), "danger");
+        toast({
+          position: "top",
+          title: "Required:",
+          description: error.join(", "),
+          status: "info",
+          duration: 5000,
+          isClosable: true,
+        });
       } else {
         // do the fetch request here
-        console.log(serverbaseurl);
         const res = await axios.post(`${serverbaseurl}/auth/signup`, {
           name,
         });
-        console.log(res);
-        if (res.status === 200) {
+        if (res.status === 200 && res.data.status === true) {
           setWebDetails((prev) => {
             const object = {
               ...prev,
@@ -56,12 +58,37 @@ function CreateCard() {
             localStorage.setItem("z-story-obj", JSON.stringify(object));
             return object;
           });
-          showAlert("Account created.. Enjoy your day", "success");
+          toast({
+            position: "top",
+            title: "Account created, Enjoy your day!:",
+            description: error.join(", "),
+            status: "success",
+            duration: 5000,
+            isClosable: true,
+          });
         } else {
-          showAlert("Account creation failed", "danger");
+          toast({
+            position: "top",
+            title: "Creation failed!",
+            description: "Please try again, Looks like there is a problem!",
+            status: "warning",
+            duration: 5000,
+            isClosable: true,
+          });
+          setLoading(false);
         }
       }
-    } catch (err) {}
+    } catch (err) {
+      toast({
+        position: "top",
+        title: "Creation failed!",
+        description: "Please try again, There might be a server issue!",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+      setLoading(false);
+    }
   };
 
   const navigate = useNavigate();
@@ -136,11 +163,15 @@ function CreateCard() {
             autoComplete="off"
           />
 
-          <button
+          <Button
+            className={WebDetails.darkMode ? styles.darkbutton : ""}
+            isLoading={loading}
             type="submit"
-            className={WebDetails.darkMode ? styles.darkbutton : ""}>
+            loadingText="Please Wait"
+            colorScheme="blue"
+            variant="outline">
             Create your link 😍
-          </button>
+          </Button>
           <label style={{ fontSize: "15px", marginBottom: "14px" }}>
             <input
               style={{

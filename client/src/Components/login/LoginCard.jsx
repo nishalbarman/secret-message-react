@@ -1,18 +1,19 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { WebContext } from "../../Context/WebDetails";
 import ContainerCard from "../containercard/ContainerCard";
+import { Button, ButtonGroup } from "@chakra-ui/react";
+import { useToast } from "@chakra-ui/react";
 import styles from "../commoncardstyles/CommonCardStyles.module.css";
 
 function LoginCard() {
+  const [loading, setLoading] = useState(false);
+
   const webContext = useContext(WebContext);
-  const {
-    WebDetails,
-    setWebDetails,
-    alert: { showAlert },
-    serverbaseurl,
-  } = webContext;
+  const { WebDetails, setWebDetails, serverbaseurl } = webContext;
+
+  const toast = useToast();
 
   const navigate = useNavigate();
   if (WebDetails.token) {
@@ -20,6 +21,7 @@ function LoginCard() {
   }
 
   const handleLogin = async (e) => {
+    setLoading(true);
     e.preventDefault();
     try {
       const userid = e.target.userid;
@@ -36,15 +38,24 @@ function LoginCard() {
       }
 
       if (error.length > 0) {
-        showAlert(error.join(", "), "danger");
+        // showAlert(error.join(", "), "danger");
+        toast({
+          position: "top",
+          title: "Required:",
+          description: error.join(", "),
+          status: "info",
+          duration: 5000,
+          isClosable: true,
+        });
+        setLoading(false);
       } else {
         // do the fetch request here
         const res = await axios.post(`${serverbaseurl}/auth/login`, {
           userid: userid.value,
           userpin: userpin.value,
         });
-        if (res.status === 200) {
-          console.log(res);
+        console.log(res)
+        if (res.status === 200 && res.data.status === true) {
           setWebDetails((prev) => {
             const object = {
               ...prev,
@@ -56,12 +67,37 @@ function LoginCard() {
             localStorage.setItem("z-story-obj", JSON.stringify(object));
             return object;
           });
-          showAlert("Login successfull", "success");
+          toast({
+            position: "top",
+            title: "Login successful!",
+            status: "success",
+            duration: 5000,
+            isClosable: true,
+          });
         } else {
-          showAlert("Login failed", "danger");
+          setLoading(false);
+          toast({
+            position: "top",
+            title: "Login Failed",
+            description: res.data.message,
+            status: "error",
+            duration: 5000,
+            isClosable: true,
+          });
+          setLoading(false);
         }
       }
-    } catch (err) {}
+    } catch (err) {
+      toast({
+        position: "top",
+        title: "Login failed!",
+        description: "There might be a server issue.. Try again!",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -110,11 +146,15 @@ function LoginCard() {
             placeholder="Enter PIN"
             autoComplete="off"
           />
-          <button
+
+          <Button
+            isLoading={loading}
             type="submit"
-            className={WebDetails.darkMode ? styles.darkbutton : ""}>
+            loadingText="Please Wait"
+            colorScheme="blue"
+            variant="outline">
             Login
-          </button>
+          </Button>
 
           <label style={{ fontSize: "15px" }}>
             Don't have an account? <Link to="/">Create Account</Link>
