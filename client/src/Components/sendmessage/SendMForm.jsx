@@ -44,10 +44,8 @@ function SendMForm() {
 
       if (error.length > 0) {
         showAlert(error.join(", "), "danger");
-        console.log("error.length > 0");
       } else if (reciepientId === null || reciepientId === undefined) {
         showAlert("Some technical error occured", "danger");
-        console.log("Recipient id is null");
       } else {
         socket.emit("new-anonymouse-message", {
           uid: reciepientId,
@@ -56,7 +54,6 @@ function SendMForm() {
       }
     } catch (err) {
       showAlert("Some technical error occured", "danger");
-      console.log("Form error", err);
     }
   };
 

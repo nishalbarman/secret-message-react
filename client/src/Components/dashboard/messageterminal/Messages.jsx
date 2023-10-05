@@ -28,13 +28,12 @@ function Messages({ setRef, context }) {
   };
 
   socket.on("new_message", (message) => {
-    console.log("Recieved data => ", message);
     const new_message_array = [message, ...messageList];
     setMessageList(new_message_array);
   });
 
   socket.on("wrong_token", (message) => {
-    console.log("Recieved wrong token message => ", message);
+    console.log("Recieved wrong message => ", message);
   });
 
   useEffect(() => {
