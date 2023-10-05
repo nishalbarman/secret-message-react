@@ -5,6 +5,8 @@ import ContainerCard from "../../containercard/ContainerCard";
 import MessageCard from "./messagecard/MessageCard";
 import { useRef } from "react";
 
+import { socket } from "../../../socket";
+
 function Messages({ setRef, context }) {
   const colorList = ["rgb(240,47,76)", "rgb(0,172,238)"];
   const [messageList, setMessageList] = useState([]);
@@ -25,17 +27,29 @@ function Messages({ setRef, context }) {
     } catch (error) {}
   };
 
+  socket.on("new_message", (message) => {
+    console.log("Recieved data => ", message);
+    const new_message_array = [message, ...messageList];
+    setMessageList(new_message_array);
+  });
+
+  socket.on("wrong_token", (message) => {
+    console.log("Recieved wrong token message => ", message);
+  });
+
   useEffect(() => {
     setRef(() => {
       return ref;
     });
     getMessages();
-    let id = setInterval(() => {
-      getMessages();
-    }, 30000);
+
+    socket.connect();
+    socket.emit("joined", context.WebDetails.token);
 
     return () => {
-      clearInterval(id);
+      socket.off("wrong_token");
+      socket.off("new_message");
+      socket.disconnect();
     };
   }, []);
 
@@ -50,11 +64,12 @@ function Messages({ setRef, context }) {
         }}></div>
       <div style={{ width: "100%" }} ref={ref}>
         {messageList.length > 0 ? (
-          messageList.map((msg) => {
+          messageList.map((msg, i) => {
             return (
               <MessageCard
+                key={i}
                 style={{
-                  backgroundColor: `${colorList[Math.round(Math.random())]}`,
+                  backgroundColor: `${colorList[i % 2]}`,
                   color: "white",
                 }}
                 message={msg.message}

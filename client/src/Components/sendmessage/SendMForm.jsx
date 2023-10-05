@@ -1,8 +1,8 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { WebContext } from "../../Context/WebDetails";
 import ContainerCard from "../containercard/ContainerCard";
-import axios from "axios";
+import { socket } from "../../socket";
 import styles from "../commoncardstyles/CommonCardStyles.module.css";
 
 function SendMForm() {
@@ -49,21 +49,33 @@ function SendMForm() {
         showAlert("Some technical error occured", "danger");
         console.log("Recipient id is null");
       } else {
-        const data = await axios.post(`${serverbaseurl}/m/${reciepientId}`, {
+        socket.emit("new-anonymouse-message", {
+          uid: reciepientId,
           message: message.value,
         });
-        if (data.status === 200) {
-          // showAlert("Message sent successfully", "success");
-          navigate(`/?r=${reciepientId}`);
-        } else {
-          showAlert("Some technical error occured", "danger");
-        }
       }
     } catch (err) {
       showAlert("Some technical error occured", "danger");
       console.log("Form error", err);
     }
   };
+
+  socket.on("response-back", (data) => {
+    showAlert(data.message, "success");
+    if (data.success) {
+      navigate(`/?r=${reciepientId}`);
+    }
+  });
+
+  useEffect(() => {
+    if (!WebDetails.token) {
+      socket.connect();
+    }
+
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
 
   return (
     <ContainerCard style={{ marginTop: "25px", width: "100%" }}>

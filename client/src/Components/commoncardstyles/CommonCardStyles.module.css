@@ -107,7 +107,6 @@ p.title {
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  white-space: nowrap;
   font-size: 1.8rem;
   font-weight: 800;
   text-align: center;
