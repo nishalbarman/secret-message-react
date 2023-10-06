@@ -41,6 +41,7 @@ function CreateCard() {
           duration: 5000,
           isClosable: true,
         });
+        setLoading(false);
       } else {
         // do the fetch request here
         const res = await axios.post(`${serverbaseurl}/auth/signup`, {

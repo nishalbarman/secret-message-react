@@ -51,8 +51,9 @@ function ShareCard({ callback }) {
           "Are you sure, you want to continue? Deleting your account will erase all the messages and details related to this account...",
         isModalVisible: true,
         buttonText: "Delete Account",
-        handleDelete: async () => {
+        handleDelete: async (setLoading) => {
           try {
+            if (setLoading !== undefined) setLoading(true);
             // handle delete is remaining
             const res = await axios.delete(`${serverbaseurl}/auth/delete`, {
               headers: {
@@ -72,7 +73,9 @@ function ShareCard({ callback }) {
               duration: 5000,
               isClosable: true,
             });
+            if (setLoading !== undefined) setLoading(false);
           } catch (error) {
+            if (setLoading !== undefined) setLoading(false);
             toast({
               position: "top",
               title: "Try again",

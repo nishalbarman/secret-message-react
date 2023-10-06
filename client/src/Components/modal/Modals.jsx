@@ -1,15 +1,19 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import WebContext from "../../Context/WebDetails";
 import Modal from "react-bootstrap/Modal";
-import Button from "react-bootstrap/Button";
+import BootButton from "react-bootstrap/Button";
+import { Button } from "@chakra-ui/react";
 
 function Modals() {
+  const [loading, setLoading] = useState(false);
   const {
     modal: {
       modal: { isModalVisible, title, message, handleDelete, buttonText },
       setModal,
     },
   } = useContext(WebContext);
+
+  console.log(handleDelete);
 
   return (
     <>
@@ -26,7 +30,7 @@ function Modals() {
         </Modal.Header>
         <Modal.Body>{message}</Modal.Body>
         <Modal.Footer>
-          <Button
+          <BootButton
             variant="secondary"
             onClick={() => {
               setModal((prev) => {
@@ -34,8 +38,14 @@ function Modals() {
               });
             }}>
             Close
-          </Button>
-          <Button variant="primary" onClick={handleDelete}>
+          </BootButton>
+          <Button
+            onClick={() => {
+              handleDelete(setLoading);
+            }}
+            isLoading={loading}
+            loadingText="Please Wait"
+            colorScheme="blue">
             {buttonText}
           </Button>
         </Modal.Footer>
