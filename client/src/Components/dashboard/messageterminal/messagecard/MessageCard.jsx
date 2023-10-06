@@ -1,10 +1,11 @@
 import React from "react";
+import { Spinner } from "@chakra-ui/react";
 import styles from "./MessageCard.module.css";
 
-function MessageCard({ message, style }) {
+function MessageCard({ message, style, loading }) {
   return (
     <div className={styles.messagecard} style={style}>
-      <p>{message}</p>
+      {loading ? <Spinner size="lg" mr={"20px"} /> : <p>{message}</p>}
     </div>
   );
 }

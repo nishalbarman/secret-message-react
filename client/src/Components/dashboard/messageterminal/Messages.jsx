@@ -10,6 +10,8 @@ import { socket } from "../../../socket";
 import WebContext from "../../../Context/WebDetails";
 
 function Messages({ setRef, context }) {
+  const [loading, setLoading] = useState(true);
+
   const webContext = useContext(WebContext);
 
   const [messageList, setMessageList] = useState([]);
@@ -20,6 +22,7 @@ function Messages({ setRef, context }) {
 
   const getMessages = async () => {
     try {
+      setLoading(true);
       const res = await axios.get(`${context.serverbaseurl}/m`, {
         headers: {
           "Auth-Token": context.WebDetails.token,
@@ -28,8 +31,27 @@ function Messages({ setRef, context }) {
 
       if (res.status === 200) {
         setMessageList(res.data);
+        setLoading(false);
+      } else {
+        setLoading(false);
+        toast({
+          position: "top",
+          title: "Messages cannot be retrieved",
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+        });
       }
-    } catch (error) {}
+    } catch (error) {
+      setLoading(false);
+      toast({
+        position: "top",
+        title: "Messages cannot be retrieved",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    }
   };
 
   socket.on("new_message", (message) => {
@@ -79,20 +101,36 @@ function Messages({ setRef, context }) {
           borderBottom: "1px solid rgb(0,0,0, 0.1)",
         }}></div>
       <div style={{ width: "100%" }} ref={ref}>
-        {messageList.length > 0 ? (
+        {loading && (
+          <MessageCard
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              backgroundColor: `rgb(240,47,76)`,
+              color: "white",
+              fontSize: "20px",
+              fontWeight: "700",
+              textAlign: "center",
+            }}
+            loading={true}
+            // message="Please wait while we load"
+          />
+        )}
+        {!loading &&
+          messageList.length > 0 &&
           messageList.map((msg, i) => {
             return (
               <MessageCard
                 key={i}
                 style={{
-                  // backgroundColor: `${colorList[i % 2]}`,
                   color: "white",
                 }}
                 message={msg.message}
               />
             );
-          })
-        ) : (
+          })}
+        {!loading && messageList.length <= 0 && (
           <MessageCard
             style={{
               backgroundColor: `black`,
