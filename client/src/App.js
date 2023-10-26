@@ -10,6 +10,8 @@ import Modals from "./Components/modal/Modals";
 import Login from "./Components/login/Login";
 import SendMessage from "./Components/sendmessage/SendMessage";
 
+import notfoundImage from "./Images/404.jpg";
+
 function App() {
   useEffect(() => {
     console.clear();
@@ -26,6 +28,21 @@ function App() {
           <Route
             path="/m/:reciepientId/:name"
             element={<SendMessage />}></Route>
+          <Route
+            path="/*"
+            element={
+              <div
+                style={{
+                  width: "100%",
+                  alignItems: "center",
+                  minHeight: "80vh",
+                  display: "flex",
+                  placeContent: "center",
+                }}>
+                <img style={{ width: "500px" }} src={notfoundImage} />
+              </div>
+            }
+          />
         </Routes>
       </Router>
     </WebStates>
