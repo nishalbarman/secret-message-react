@@ -85,7 +85,7 @@ app.use(
     origin: [
       "http://localhost:3000",
       "https://secret-msg-test.netlify.app",
-      "https://nishalbarman.github.io/secret-message-react/",
+      "https://nishalbarman.github.io/secret-message-react",
       "https://nishalbarman.github.io",
     ],
     optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
