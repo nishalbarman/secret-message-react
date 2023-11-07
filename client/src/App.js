@@ -18,7 +18,7 @@ function App() {
   }, []);
   return (
     <WebStates>
-      <Router>
+      <Router basename="secret-message-react">
         <Navbars />
         {/* <Alerts /> */}
         <Modals />
