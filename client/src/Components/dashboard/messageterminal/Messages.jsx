@@ -6,6 +6,8 @@ import MessageCard from "./messagecard/MessageCard";
 import { useRef } from "react";
 import { useToast } from "@chakra-ui/react";
 
+import { BellIcon } from "@chakra-ui/icons";
+
 import { socket } from "../../../socket";
 import WebContext from "../../../Context/WebDetails";
 
@@ -54,7 +56,36 @@ function Messages({ setRef, context }) {
     }
   };
 
+  const [isTabActive, setIsTabActive] = useState(true);
+
+  useEffect(() => {
+    Notification.requestPermission();
+
+    const visibilitychange = () => {
+      if (document.hidden) {
+        setIsTabActive(false);
+      } else {
+        setIsTabActive(false);
+      }
+    };
+
+    document.addEventListener("visibilitychange", visibilitychange);
+
+    return () => {
+      document.removeEventListener("visibilitychange", visibilitychange);
+    };
+  }, []);
+
   socket.on("new_message", (message) => {
+    if ("Notification" in window && Notification.permission === "granted") {
+      if (!isTabActive) {
+        let notification = new Notification(`Secret message arrived!`, {
+          body: `Someone sent you a message`,
+          icon: BellIcon,
+        });
+      }
+    }
+    console.log(message);
     const new_message_array = [message, ...messageList];
     setMessageList(new_message_array);
   });

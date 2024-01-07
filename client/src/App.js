@@ -18,9 +18,8 @@ function App() {
   }, []);
   return (
     <WebStates>
-      <Router basename="/secret-message-react">
+      <Router>
         <Navbars />
-        {/* <Alerts /> */}
         <Modals />
         <Routes>
           <Route path="/" element={<HomePage />}></Route>
